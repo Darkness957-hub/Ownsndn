@@ -1,0 +1,68 @@
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TeleportService = game:GetService("TeleportService")
+local Workspace = game:GetService("Workspace")
+
+local lPlayer = Players.LocalPlayer
+
+-- Wait for Character to Load
+repeat wait() until lPlayer.Character and lPlayer.Character:FindFirstChild("HumanoidRootPart")
+local pRoot = lPlayer.Character:FindFirstChild("HumanoidRootPart")
+
+-- Function para sa smooth teleportation
+local function SmoothTeleport(part)
+    if part then
+        pRoot.CFrame = part.CFrame
+        wait(1) -- Mas mataas na delay para marehistro ng server
+    end
+end
+
+-- Vote System
+local args = {
+    [1] = {
+        ["Best Content Update"] = "Tower Defense Simulator",
+        ["People's Choice"] = "BedWars",
+        ["Best Use of Avatar Fashion"] = "World // Zero",
+        ["Video Star of the Year"] = "Flamingo"
+    },
+    [2] = Workspace:FindFirstChild("VotingScreen") -- Siguraduhin na tama ang path
+}
+
+-- ✅ Circlet of Patience
+SmoothTeleport(Workspace:FindFirstChild("Scavenger") and Workspace.Scavenger:FindFirstChild("Circlet"))
+
+-- ✅ Where Are The Shards?
+for i = 1, 4 do
+    SmoothTeleport(Workspace:FindFirstChild("CubePieces") and Workspace.CubePieces:FindFirstChild("Block" .. i))
+end
+
+-- ✅ I Voted - In Style
+if ReplicatedStorage:FindFirstChild("Events") and ReplicatedStorage.Events:FindFirstChild("RemoteEvents") then
+    local VoteEvent = ReplicatedStorage.Events.RemoteEvents:FindFirstChild("Vote")
+    if VoteEvent then
+        VoteEvent:FireServer(unpack(args))
+        wait(2) -- Maghintay bago magpatuloy para marehistro ng server
+    end
+end
+
+-- ✅ A Timeless Hat (Tween Effect with Proper Trigger)
+local TimelessHatTrigger = Workspace:FindFirstChild("HatTriggerPart") -- Palitan ito ng tamang part name
+if TimelessHatTrigger then
+    SmoothTeleport(TimelessHatTrigger)
+    wait(3) -- Maghintay para sigurado
+end
+
+if pRoot then
+    local tweenInfo = TweenInfo.new(2)
+    local tween = TweenService:Create(pRoot, tweenInfo, {Position = Vector3.new(1.19464, 23.4132, -109.854)})
+    tween:Play()
+    wait(1)
+end
+
+-- ✅ Thinking Horns (Teleport to Game)
+if game.PlaceId then
+    TeleportService:Teleport(game.PlaceId, lPlayer)
+end
+
+end)
